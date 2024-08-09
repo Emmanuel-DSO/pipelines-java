@@ -1,6 +1,13 @@
-jobs:
-- job:
-  variables:
-    a: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 100)]
-  steps:
-  - bash: echo $(a)
+parameters:
+- name: myArray
+  type: object
+  default:
+    - FOO
+    - BAR
+    - ZOO
+
+variables:
+   A: ${{ join(';',parameters.myArray) }}
+
+steps:
+  - script: echo $A # outputs FOO;BAR;ZOO
