@@ -1,15 +1,7 @@
-parameters:
-  - name: listOfValues
-    type: object
-    default:
-      this_is:
-        a_complex: object
-        with:
-          - one
-          - two
+variables:
+  major: 1
+  # define minor as a counter with the prefix as variable major, and seed as 100.
+  minor: $[counter(variables['major'], 100)]
 
 steps:
-- script: |
-    echo "${MY_JSON}"
-  env:
-    MY_JSON: ${{ convertToJson(parameters.listOfValues) }}
+- bash: echo $(minor)
