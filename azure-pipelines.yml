@@ -1,7 +1,6 @@
-variables:
-  major: 1
-  # define minor as a counter with the prefix as variable major, and seed as 100.
-  minor: $[counter(variables['major'], 100)]
-
-steps:
-- bash: echo $(minor)
+jobs:
+- job:
+  variables:
+    a: $[counter(format('{0:yyyyMMdd}', pipeline.startTime), 100)]
+  steps:
+  - bash: echo $(a)
