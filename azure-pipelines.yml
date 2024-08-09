@@ -1,18 +1,15 @@
 parameters:
-- name: branchOptions
-  displayName: Source branch options
-  type: object
-  default:
-    - refs/heads/main
-    - refs/heads/test
+  - name: listOfValues
+    type: object
+    default:
+      this_is:
+        a_complex: object
+        with:
+          - one
+          - two
 
-jobs:
-  - job: A1 
-    steps:
-    - ${{ each value in parameters.branchOptions }}:
-      - script: echo ${{ value }}
-
-  - job: B1 
-    condition: ${{ containsValue(parameters.branchOptions, variables['Build.SourceBranch']) }}
-    steps:
-      - script: echo "Matching branch found"
+steps:
+- script: |
+    echo "${MY_JSON}"
+  env:
+    MY_JSON: ${{ convertToJson(parameters.listOfValues) }}
