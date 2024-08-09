@@ -1,10 +1,18 @@
-variables:
-  staticVar: 'my value' # static variable
-  compileVar: ${{ variables.staticVar }} # compile time expression
-  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')] # runtime expression
+parameters:
+- name: branchOptions
+  displayName: Source branch options
+  type: object
+  default:
+    - refs/heads/main
+    - refs/heads/test
 
-steps:
-  - script: |
-      echo ${{variables.staticVar}} # outputs my value
-      echo $(compileVar) # outputs my value
-      echo $(isMain) # outputs True
+jobs:
+  - job: A1 
+    steps:
+    - ${{ each value in parameters.branchOptions }}:
+      - script: echo ${{ value }}
+
+  - job: B1 
+    condition: ${{ containsValue(parameters.branchOptions, variables['Build.SourceBranch']) }}
+    steps:
+      - script: echo "Matching branch found"
